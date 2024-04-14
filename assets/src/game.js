@@ -81,14 +81,14 @@ function pieceMove(isClear,dx,dy)
         return arr.slice();
     });
     }
+    let isValid = true;
 
     switch(currentPiece.pieceID)
     {
         case "O":
-            let isValid = true;
             currentPiece.y = clamp(currentPiece.y,0,18)
             currentPiece.x = clamp(currentPiece.x,0,8)
-            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1))
+            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1) || (currentPiece.y == 18 && dy >= 1))
             {
                 drawBoard()
                 return;
@@ -114,9 +114,11 @@ function pieceMove(isClear,dx,dy)
                 }
             }
             currentPiece.x += dx
+            currentPiece.y += dy
             if(!isValid)
             {
                 currentPiece.x -= dx
+                currentPiece.y -= dy
                 matrix = safeboard.map(function(arr) {
                     return arr.slice();
                 });
@@ -124,26 +126,86 @@ function pieceMove(isClear,dx,dy)
             drawBoard()
         break;
         case "I":
-            for (let i = currentPiece.  y; i < currentPiece.y+4; i++) {
+                    /*
+            currentPiece.y = clamp(currentPiece.y,0,18)
+            currentPiece.x = clamp(currentPiece.x,0,8)
+            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1) || (currentPiece.y == 18 && dy >= 1))
+            {
+                drawBoard()
+                return;
+            }
+            */
+            for (let i = currentPiece.y; i < currentPiece.y+4; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+4; j++) {
-                    matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]
-                    if(isClear)
-                    {
-                        matrix[i][j] = 0
-                    }
+                    matrix[i][j] = 0
                 }
+            }
+            if(isClear)
+            {
+                drawBoard()
+                return;
+            }
+            //simulate next position
+            for (let i = currentPiece.y+dy; i < currentPiece.y+dy+4; i++) {
+                for (let j = currentPiece.x+dx; j < currentPiece.x+dx+4; j++) {
+                    if(matrix[i][j] != 0)
+                    {
+                        isValid = false;
+                    }
+                    matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]
+                }
+            }
+            currentPiece.x += dx
+            currentPiece.y += dy
+            if(!isValid)
+            {
+                currentPiece.x -= dx
+                currentPiece.y -= dy
+                matrix = safeboard.map(function(arr) {
+                    return arr.slice();
+                });
             }
             drawBoard()
         break;
         default:
+            /*
+            currentPiece.y = clamp(currentPiece.y,0,18)
+            currentPiece.x = clamp(currentPiece.x,0,8)
+            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1) || (currentPiece.y == 18 && dy >= 1))
+            {
+                drawBoard()
+                return;
+            }
+            */
             for (let i = currentPiece.y; i < currentPiece.y+3; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+3; j++) {
-                    matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]
-                    if(isClear)
-                    {
-                        matrix[i][j] = 0
-                    }
+                    matrix[i][j] = 0
                 }
+            }
+            if(isClear)
+            {
+                drawBoard()
+                return;
+            }
+            //simulate next position
+            for (let i = currentPiece.y+dy; i < currentPiece.y+dy+3; i++) {
+                for (let j = currentPiece.x+dx; j < currentPiece.x+dx+3; j++) {
+                    if(matrix[i][j] != 0)
+                    {
+                        isValid = false;
+                    }
+                    matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]
+                }
+            }
+            currentPiece.x += dx
+            currentPiece.y += dy
+            if(!isValid)
+            {
+                currentPiece.x -= dx
+                currentPiece.y -= dy
+                matrix = safeboard.map(function(arr) {
+                    return arr.slice();
+                });
             }
             drawBoard()
         break;
@@ -221,9 +283,9 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "ArrowUp":
-        pieceMove(true)
+        pieceMove(true,0,0)
         rotateClockwise()
-        pieceMove(false)
+        pieceMove(false,0,0)
         break;
 
         case "KeyZ":
@@ -233,8 +295,8 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "Space":
-        //nextPiece()
-        spawnPiece("O")//currentBag[0])
+        nextPiece()
+        spawnPiece(currentBag[0])
         break;
 
         case "KeyC":
@@ -250,4 +312,4 @@ document.addEventListener("keydown",function(e)
     }
 })
 
-spawnPiece("O")//currentBag[0])
+spawnPiece(currentBag[0])
