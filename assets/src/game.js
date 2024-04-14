@@ -1,7 +1,11 @@
 const bag = ["T", "J", "O", "Z", "S", "L", "I"]
 let currentBag = shuffle()
+let nextBag = shuffle()
 let currentPiece = new piece()
 let currentHold = null
+safeboard = matrix.map(function(arr) {
+    return arr.slice();
+});
 
 function shuffle() {
     return bag.toSorted(() => Math.random() - 0.5);
@@ -64,28 +68,63 @@ function nextPiece() {
     currentBag.shift()
     if (currentBag.length <= 0) {
         currentBag = shuffle()
+        nextBag = shuffle()
     }
     spawnPiece(currentBag[0])
 }
 
-function pieceMove(isClear)
+function pieceMove(isClear,dx,dy)
 {
+    if(isClear) //why does this work?
+    {
+    safeboard = matrix.map(function(arr) {
+        return arr.slice();
+    });
+    }
+
     switch(currentPiece.pieceID)
     {
         case "O":
+            let isValid = true;
+            currentPiece.y = clamp(currentPiece.y,0,18)
+            currentPiece.x = clamp(currentPiece.x,0,8)
+            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1))
+            {
+                drawBoard()
+                return;
+            }
             for (let i = currentPiece.y; i < currentPiece.y+2; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+2; j++) {
-                    matrix[i][j] = currentPiece.pieceArr[0][0]
-                    if(isClear)
-                    {
-                        matrix[i][j] = 0
-                    }
+                    matrix[i][j] = 0
                 }
+            }
+            if(isClear)
+            {
+                drawBoard()
+                return;
+            }
+            //simulate next position
+            for (let i = currentPiece.y+dy; i < currentPiece.y+dy+2; i++) {
+                for (let j = currentPiece.x+dx; j < currentPiece.x+dx+2; j++) {
+                    if(matrix[i][j] != 0)
+                    {
+                        isValid = false;
+                    }
+                    matrix[i][j] = currentPiece.pieceArr[0][0]
+                }
+            }
+            currentPiece.x += dx
+            if(!isValid)
+            {
+                currentPiece.x -= dx
+                matrix = safeboard.map(function(arr) {
+                    return arr.slice();
+                });
             }
             drawBoard()
         break;
         case "I":
-            for (let i = currentPiece.y; i < currentPiece.y+4; i++) {
+            for (let i = currentPiece.  y; i < currentPiece.y+4; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+4; j++) {
                     matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]
                     if(isClear)
@@ -146,8 +185,18 @@ function holdPiece()
         spawnPiece(currentBag[0])
     }
     drawHold()
-    
 }
+
+/*
+window.setInterval(function(){
+    pieceMove(true)
+    currentPiece.y++
+    pieceMove(false)
+    drawBoard()
+},500)
+*/
+
+
 
 document.addEventListener("keydown",function(e)
 {
@@ -155,24 +204,20 @@ document.addEventListener("keydown",function(e)
     {
         
         case "ArrowRight":
-            pieceMove(true)
-            currentPiece.x++;
+            pieceMove(true,1,0)
+            //currentPiece.x++;
             //currentPiece.x = clamp(currentPiece.x,0,8)
-            pieceMove(false)
+            pieceMove(false,1,0)
         break;
 
         case "ArrowDown":
-            pieceMove(true)
-            currentPiece.y++;
-            //currentPiece.y = clamp(currentPiece.y,0,18)
-            pieceMove(false)
+            pieceMove(true,0,1)
+            pieceMove(false,0,1)
         break;
 
         case "ArrowLeft":
-            pieceMove(true)
-            currentPiece.x--;
-            //  currentPiece.x = clamp(currentPiece.x,0,8)
-            pieceMove(false)
+            pieceMove(true,-1,0)
+            pieceMove(false,-1,0)
         break;
 
         case "ArrowUp":
@@ -188,8 +233,8 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "Space":
-        nextPiece()
-        spawnPiece(currentBag[0])
+        //nextPiece()
+        spawnPiece("O")//currentBag[0])
         break;
 
         case "KeyC":
@@ -205,4 +250,4 @@ document.addEventListener("keydown",function(e)
     }
 })
 
-spawnPiece(currentBag[0])
+spawnPiece("O")//currentBag[0])

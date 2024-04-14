@@ -6,6 +6,8 @@ let cols = 20
 let matrix = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
 let hold = document.getElementById("hold")
 let hCTX = hold.getContext("2d")
+let queue = document.getElementById("queue")
+let qCTX = queue.getContext("2d")
 
 let colorTable =
 {
@@ -21,25 +23,30 @@ let colorTable =
 function initBoard() {
     bCTX.strokeStyle = "rgb(255,255,255)"
     hCTX.strokeStyle = "rgb(255,255,255)"
+    qCTX.strokeStyle = "rgb(255,255,255)"
     for (let y = 0; y < 20; y++) {
+        qCTX.beginPath()
+        qCTX.moveTo(0,24*y);
+        qCTX.lineTo(240,24*y)
         bCTX.beginPath();
         bCTX.moveTo(0, 24 * y);
         bCTX.lineTo(240, 24 * y)
+        bCTX.moveTo(24 * y, 0);
+        bCTX.lineTo(24 * y, 480)
         bCTX.stroke()
-    }
-    for (let x = 0; x < 20; x++) {
-        bCTX.beginPath();
-        bCTX.moveTo(24 * x, 0);
-        bCTX.lineTo(24 * x, 480)
-        bCTX.stroke()
+        qCTX.stroke()
     }
     for (let y = 0; y < 4; y++) {
         hCTX.beginPath();
+        qCTX.beginPath()
         hCTX.moveTo(0, 24 * y);
         hCTX.lineTo(96, 24 * y)
         hCTX.moveTo(24 * y,0);
-        hCTX.lineTo(24 * y,96)
+        hCTX.lineTo(24 * y,96);
+        qCTX.moveTo(24 * y,0);
+        qCTX.lineTo(24 * y,240)
         hCTX.stroke()
+        qCTX.stroke()
     }
 
 }
@@ -97,6 +104,11 @@ function drawHold()
                 }
         break;
     }
+}
+
+function drawQueue()
+{
+    
 }
 
 
