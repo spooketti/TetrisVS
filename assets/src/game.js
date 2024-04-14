@@ -142,6 +142,18 @@ function pieceMove(isClear,dx,dy)
             //simulate next position
             for (let i = currentPiece.y+dy; i < currentPiece.y+dy+4; i++) {
                 for (let j = currentPiece.x+dx; j < currentPiece.x+dx+4; j++) {
+                    if(i > 19)
+                    {
+                        if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
+                        {
+                            continue
+                        }
+                        matrix = safeboard.map(function(arr) {
+                            return arr.slice();
+                        });
+                        drawBoard()
+                        return;
+                    }
                     if(matrix[i][j] != 0)
                     {
                         if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
@@ -192,6 +204,18 @@ function pieceMove(isClear,dx,dy)
             //simulate next position
             for (let i = currentPiece.y+dy; i < currentPiece.y+dy+3; i++) {
                 for (let j = currentPiece.x+dx; j < currentPiece.x+dx+3; j++) {
+                    if(i > 19)
+                    {
+                        if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
+                        {
+                            continue
+                        }
+                        matrix = safeboard.map(function(arr) {
+                            return arr.slice();
+                        });
+                        drawBoard()
+                        return;
+                    }
                     if(matrix[i][j] != 0)
                     {
                         if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
