@@ -27,9 +27,16 @@ function spawnPiece(piece) {
         case "I":
             for (let i = 0; i < 4; i++) {
                 for (let j = 0; j < 4; j++) {
-                    matrix[i][j] = iTable[i][j]
+                    matrix[i][j+3] = iTable[i][j]
                 }
             }
+            currentPiece.x = 3
+            currentPiece.y = 0
+            currentPiece.pieceID = "I"
+            currentPiece.pieceArr = iTable.map(function(arr) {
+                return arr.slice();
+            });
+            drawBoard()
             break;
         default:
             for(let i=0;i<3;i++)
@@ -68,6 +75,18 @@ function pieceMove(isClear)
             for (let i = currentPiece.y; i < currentPiece.y+2; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+2; j++) {
                     matrix[i][j] = currentPiece.pieceArr[0][0]
+                    if(isClear)
+                    {
+                        matrix[i][j] = 0
+                    }
+                }
+            }
+            drawBoard()
+        break;
+        case "I":
+            for (let i = currentPiece.y; i < currentPiece.y+4; i++) {
+                for (let j = currentPiece.x; j < currentPiece.x+4; j++) {
+                    matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]
                     if(isClear)
                     {
                         matrix[i][j] = 0
@@ -145,6 +164,12 @@ document.addEventListener("keydown",function(e)
         case "Space":
         tempname()
         spawnPiece(currentBag[0])
+        break;
+
+        case "KeyC":
+        pieceMove(true)
+        rotateCounterClockwise()
+        pieceMove(false)
         break;
     }
 })
