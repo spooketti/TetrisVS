@@ -31,6 +31,7 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "Space":
+        checkLines()
         nextPiece()
         spawnPiece(currentBag[0])
         break;

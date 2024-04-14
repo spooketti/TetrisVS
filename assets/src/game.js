@@ -158,7 +158,6 @@ function pieceMove(isClear,dx,dy)
                     {
                         if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
                         {
-                            console.log(currentPiece.pieceArr)
                             continue
                         }
                         isValid = false
@@ -220,7 +219,6 @@ function pieceMove(isClear,dx,dy)
                     {
                         if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
                         {
-                            console.log(currentPiece.pieceArr)
                             continue
                         }
                         isValid = false
@@ -278,6 +276,31 @@ function holdPiece()
         spawnPiece(currentBag[0])
     }
     drawHold()
+}
+
+function checkLines()
+{
+    let removeRows = []
+    let zeroCount
+    for (let y = 0; y < 20; y++) {
+        zeroCount = 0
+        for (let x = 0; x < 10; x++) {
+            if(matrix[y][x] == 0)
+            {
+                zeroCount++;
+            }
+        }
+        if(zeroCount == 0)
+        {
+            removeRows.push(y)
+        }
+    }
+    for(let i=0;i<removeRows.length;i++)
+    {
+        matrix.splice(removeRows[i],1)
+        matrix.unshift(new Array(10).fill(0))
+    }
+    drawBoard()
 }
 
 /*
