@@ -1,6 +1,7 @@
 const bag = ["T", "J", "O", "Z", "S", "L", "I"]
 let currentBag = shuffle()
 let currentPiece = new piece()
+let currentHold = null
 
 function shuffle() {
     return bag.toSorted(() => Math.random() - 0.5);
@@ -59,12 +60,12 @@ function spawnPiece(piece) {
 
 
 
-function tempname() {
+function nextPiece() {
     currentBag.shift()
     if (currentBag.length <= 0) {
         currentBag = shuffle()
     }
-    console.log(currentBag)
+    spawnPiece(currentBag[0])
 }
 
 function pieceMove(isClear)
@@ -119,9 +120,34 @@ function rotateClockwise()
     currentPiece.pieceArr = currentPiece.pieceArr[0].map((val, index) => currentPiece.pieceArr.map(row => row[index]).reverse())
 }
 
+function rotate180()
+{
+    currentPiece.pieceArr.reverse().forEach(function(item) { item.reverse(); } );
+}
+
 function rotateCounterClockwise()
 {
-    currentPiece.pieceArr = currentPiece.pieceArr[0].map((val, index) => currentPiece.pieceArr.map(row => row[row.length-1-index]))}
+    currentPiece.pieceArr = currentPiece.pieceArr[0].map((val, index) => currentPiece.pieceArr.map(row => row[row.length-1-index]))
+}
+
+function holdPiece()
+{
+    if(!currentHold)
+    {
+        currentHold = currentBag[0]
+        nextPiece()
+    }
+    else
+    {
+        let temp = currentBag[0]
+        currentBag[0] = currentHold
+        currentHold = temp
+        currentHold = currentPiece.pieceID
+        spawnPiece(currentBag[0])
+    }
+    drawHold()
+    
+}
 
 document.addEventListener("keydown",function(e)
 {
@@ -162,15 +188,20 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "Space":
-        tempname()
+        nextPiece()
         spawnPiece(currentBag[0])
         break;
 
         case "KeyC":
         pieceMove(true)
-        rotateCounterClockwise()
-        pieceMove(false)
+        holdPiece()
         break;
+
+        case "KeyA":
+        pieceMove(true)
+        rotate180()
+        pieceMove(false)
+
     }
 })
 

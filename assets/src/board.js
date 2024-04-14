@@ -4,6 +4,8 @@ let bCTX = board.getContext("2d")
 let rows = 10
 let cols = 20
 let matrix = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+let hold = document.getElementById("hold")
+let hCTX = hold.getContext("2d")
 
 let colorTable =
 {
@@ -18,6 +20,7 @@ let colorTable =
 
 function initBoard() {
     bCTX.strokeStyle = "rgb(255,255,255)"
+    hCTX.strokeStyle = "rgb(255,255,255)"
     for (let y = 0; y < 20; y++) {
         bCTX.beginPath();
         bCTX.moveTo(0, 24 * y);
@@ -30,6 +33,15 @@ function initBoard() {
         bCTX.lineTo(24 * x, 480)
         bCTX.stroke()
     }
+    for (let y = 0; y < 4; y++) {
+        hCTX.beginPath();
+        hCTX.moveTo(0, 24 * y);
+        hCTX.lineTo(96, 24 * y)
+        hCTX.moveTo(24 * y,0);
+        hCTX.lineTo(24 * y,96)
+        hCTX.stroke()
+    }
+
 }
 
 function drawBoard() {
@@ -41,6 +53,49 @@ function drawBoard() {
                 bCTX.fillRect((x*24)+1,(y*24)+1,22,22)
             }
         }
+    }
+}
+
+function drawHold()
+{
+    for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+            hCTX.clearRect((x*24)+1,(y*24)+1,22,22)
+        }
+    }
+
+    switch(currentHold)
+    {
+        case "O":
+            hCTX.fillStyle = colorTable[oTable[0][0]]
+            for (let y = 0; y < 2; y++) {
+                for (let x = 0; x < 2; x++) {
+                        hCTX.fillRect(((x+1)*24)+1,((y+1)*24)+1,22,22)
+                    }
+                }
+        break;
+        case "I":
+            hCTX.fillStyle = colorTable[iTable[1][1]]
+            for (let y = 0; y < 4; y++) {
+                for (let x = 0; x < 4; x++) {
+                        if(iTable[y][x] != 0)
+                        {
+                            hCTX.fillRect((x*24)+1,(y*24)+1,22,22)
+                        }
+                    }
+                }
+        break;
+        default:
+            for (let y = 0; y < 3; y++) {
+                for (let x = 0; x < 3; x++) {
+                        if(tableMap[currentHold][y][x] != 0)
+                        {
+                            hCTX.fillStyle = colorTable[tableMap[currentHold][y][x]]
+                            hCTX.fillRect(((x+1)*24)+1,((y+1)*24)+1,22,22)
+                        }
+                    }
+                }
+        break;
     }
 }
 
