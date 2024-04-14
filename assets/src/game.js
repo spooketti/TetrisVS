@@ -126,18 +126,12 @@ function pieceMove(isClear,dx,dy)
             drawBoard()
         break;
         case "I":
-                    /*
-            currentPiece.y = clamp(currentPiece.y,0,18)
-            currentPiece.x = clamp(currentPiece.x,0,8)
-            if((currentPiece.x == 8 && dx >= 1) || (currentPiece.x == 0 && dx <= -1) || (currentPiece.y == 18 && dy >= 1))
-            {
-                drawBoard()
-                return;
-            }
-            */
             for (let i = currentPiece.y; i < currentPiece.y+4; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+4; j++) {
-                    matrix[i][j] = 0
+                    if(currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]!=0)
+                    {
+                        matrix[i][j] = 0
+                    }
                 }
             }
             if(isClear)
@@ -150,7 +144,12 @@ function pieceMove(isClear,dx,dy)
                 for (let j = currentPiece.x+dx; j < currentPiece.x+dx+4; j++) {
                     if(matrix[i][j] != 0)
                     {
-                        isValid = false;
+                        if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
+                        {
+                            console.log(currentPiece.pieceArr)
+                            continue
+                        }
+                        isValid = false
                     }
                     matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]
                 }
@@ -179,7 +178,10 @@ function pieceMove(isClear,dx,dy)
             */
             for (let i = currentPiece.y; i < currentPiece.y+3; i++) {
                 for (let j = currentPiece.x; j < currentPiece.x+3; j++) {
-                    matrix[i][j] = 0
+                    if(currentPiece.pieceArr[i-currentPiece.y][j-currentPiece.x]!=0)
+                    {
+                        matrix[i][j] = 0
+                    }
                 }
             }
             if(isClear)
@@ -192,7 +194,12 @@ function pieceMove(isClear,dx,dy)
                 for (let j = currentPiece.x+dx; j < currentPiece.x+dx+3; j++) {
                     if(matrix[i][j] != 0)
                     {
-                        isValid = false;
+                        if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]==0)
+                        {
+                            console.log(currentPiece.pieceArr)
+                            continue
+                        }
+                        isValid = false
                     }
                     matrix[i][j] = currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x-dx]
                 }
@@ -251,65 +258,10 @@ function holdPiece()
 
 /*
 window.setInterval(function(){
-    pieceMove(true)
-    currentPiece.y++
-    pieceMove(false)
-    drawBoard()
+    pieceMove(true,0,1)
+    pieceMove(false,0,1)
 },500)
 */
 
-
-
-document.addEventListener("keydown",function(e)
-{
-    switch(e.code)
-    {
-        
-        case "ArrowRight":
-            pieceMove(true,1,0)
-            //currentPiece.x++;
-            //currentPiece.x = clamp(currentPiece.x,0,8)
-            pieceMove(false,1,0)
-        break;
-
-        case "ArrowDown":
-            pieceMove(true,0,1)
-            pieceMove(false,0,1)
-        break;
-
-        case "ArrowLeft":
-            pieceMove(true,-1,0)
-            pieceMove(false,-1,0)
-        break;
-
-        case "ArrowUp":
-        pieceMove(true,0,0)
-        rotateClockwise()
-        pieceMove(false,0,0)
-        break;
-
-        case "KeyZ":
-        pieceMove(true)
-        rotateCounterClockwise()
-        pieceMove(false)
-        break;
-
-        case "Space":
-        nextPiece()
-        spawnPiece(currentBag[0])
-        break;
-
-        case "KeyC":
-        pieceMove(true)
-        holdPiece()
-        break;
-
-        case "KeyA":
-        pieceMove(true)
-        rotate180()
-        pieceMove(false)
-
-    }
-})
 
 spawnPiece(currentBag[0])
