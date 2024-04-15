@@ -19,15 +19,13 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "ArrowUp":
-        pieceMove(true,0,0)
-        rotateClockwise()
-        pieceMove(false,0,0)
+        //pieceMove(true,0,0)
+        rotate(0)
+        //pieceMove(false,0,0)
         break;
 
         case "KeyZ":
-        pieceMove(true,0,0)
-        rotateCounterClockwise()
-        pieceMove(false,0,0)
+        rotate(1)
         break;
 
         case "Space":
@@ -42,9 +40,8 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "KeyA":
-        pieceMove(true,0,0)
-        rotate180()
-        pieceMove(false,0,0)
+        rotate(2)
+        break;
 
     }
 })
