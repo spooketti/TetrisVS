@@ -4,24 +4,19 @@ document.addEventListener("keydown",function(e)
     {
         
         case "ArrowRight":
-            pieceMove(true,1,0)
-            pieceMove(false,1,0)
+            pieceMove(1,0)
         break;
 
         case "ArrowDown":
-            pieceMove(true,0,1)
-            pieceMove(false,0,1)
+            pieceMove(0,1)
         break;
 
         case "ArrowLeft":
-            pieceMove(true,-1,0)
-            pieceMove(false,-1,0)
+            pieceMove(-1,0)
         break;
 
         case "ArrowUp":
-        //pieceMove(true,0,0)
         rotate(0)
-        //pieceMove(false,0,0)
         break;
 
         case "KeyZ":
@@ -35,7 +30,7 @@ document.addEventListener("keydown",function(e)
         break;
 
         case "KeyC":
-        pieceMove(true)
+        pieceMove()
         holdPiece()
         break;
 
