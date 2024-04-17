@@ -151,18 +151,58 @@ function drawHold() {
 }
 
 function drawQueue(queue) {
+    for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 4; x++) {
+            qCTX.clearRect((x * 24) + 1, (y * 24) + 1, 22, 22)
+        }
+    }
+    let queueMatrix = []
     for (let i = 0; i < queue.length; i++) {
-        let pieceToDraw = tableMap[queue[i]]
-        for (let y = 0; y < pieceToDraw.length; y++) {
-            for (let x = 0; x < pieceToDraw.length; x++) {
-                qCTX.fillStyle = colorTable[pieceToDraw[y][x]]
-                qCTX.fillRect((x * 24) + 1, ((2*y) * 24) + 1, 22, 22)
+        qCTX.fillStyle = "#fff"
+        let iterpiece = tableMap[queue[i]].map(function (arr) {
+            return arr.slice();
+        });
+        switch(queue[i])
+        {
+            case "O":
+                centerBuffer = 1
+            break;
+
+            case"I":
+                iterpiece = 
+                [
+                    [0, 0, 0, 0],
+                    [6, 6, 6, 6]
+                ]
+            break;
+
+            default:
+                iterpiece.splice(2, 1)
+            break;
+        }
+        for (let y = 0; y < 2; y++) {
+           queueMatrix.push(iterpiece[y])
+        }
+    }
+    for(let y=0;y<10;y++)
+    {
+        for(let x=0;x<queueMatrix[y].length;x++)
+        {
+            if(queueMatrix[y][x] != 0)
+            {
+                if(queueMatrix[y][x] == 7)
+                {
+                    qCTX.fillStyle = colorTable[queueMatrix[y][x]]
+                    qCTX.fillRect(((x+1) * 24) + 1, (y * 24) + 1, 22, 22)
+                    continue
+                }
+                qCTX.fillStyle = colorTable[queueMatrix[y][x]]
+                qCTX.fillRect(((x) * 24) + 1, (y * 24) + 1, 22, 22)
             }
         }
     }
+
 }
-
-
 
 initBoard()
 drawBoard()

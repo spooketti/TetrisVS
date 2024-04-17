@@ -13,7 +13,7 @@ function shuffle() {
 
 
 function spawnPiece(piece) {
-    drawQueue(currentBag.concat(nextBag).slice(0, 5))
+    drawQueue(currentBag.concat(nextBag).slice(1, 6))
     for (let i = 0; i < tableMap[piece].length; i++) {
         for (let j = 0; j < tableMap[piece].length; j++) {
             matrix[i][j + 3] = tableMap[piece][i][j]
