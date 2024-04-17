@@ -313,11 +313,11 @@ function hardDrop()
 {
     pieceMove(0,hardDropPos)
 }
-/*
+
 window.setInterval(function () {
     pieceMove(0, 1)
 }, 500)
-*/
+
 
 
 
