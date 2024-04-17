@@ -52,6 +52,7 @@ matrix =
 [6, 1, 2, 1, 5, 0, 5, 5, 7, 7]
 ]
 */
+
 let hold = document.getElementById("hold")
 let hCTX = hold.getContext("2d")
 let queue = document.getElementById("queue")
@@ -111,6 +112,28 @@ function drawBoard() {
     }
 }
 
+function drawGhost(dy) {
+    for (let y = currentPiece.y + dy; y < currentPiece.y + dy+currentPiece.pieceArr.length; y++) {
+        for (let x = currentPiece.x; x < currentPiece.pieceArr.length+currentPiece.x; x++) {
+            //bCTX.clearRect((x * 24) + 1, (y * 24) + 1, 22, 22)
+            if(y>19)
+            {
+                continue
+            }
+            if (matrix[y][x] == 0) {
+                if(currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x]!=0)
+                {
+                    bCTX.fillStyle = colorTable[currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x]]+"70"
+                    // console.log(currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x])
+                    bCTX.fillRect((x * 24) + 1, (y * 24) + 1, 22, 22)
+                }
+            }
+        }
+    
+    //drawBoard()
+}
+}
+
 function drawHold() {
     for (let y = 0; y < 4; y++) {
         for (let x = 0; x < 4; x++) {
@@ -118,36 +141,21 @@ function drawHold() {
         }
     }
 
-    switch (currentHold) {
-        case "O":
-            hCTX.fillStyle = colorTable[oTable[0][0]]
-            for (let y = 0; y < 2; y++) {
-                for (let x = 0; x < 2; x++) {
-                    hCTX.fillRect(((x + 1) * 24) + 1, ((y + 1) * 24) + 1, 22, 22)
-                }
-            }
-            break;
-        case "I":
-            hCTX.fillStyle = colorTable[iTable[1][1]]
-            for (let y = 0; y < 4; y++) {
-                for (let x = 0; x < 4; x++) {
-                    if (iTable[y][x] != 0) {
-                        hCTX.fillRect((x * 24) + 1, (y * 24) + 1, 22, 22)
-                    }
-                }
-            }
-            break;
-        default:
-            for (let y = 0; y < 3; y++) {
-                for (let x = 0; x < 3; x++) {
-                    if (tableMap[currentHold][y][x] != 0) {
-                        hCTX.fillStyle = colorTable[tableMap[currentHold][y][x]]
-                        hCTX.fillRect(((x + 1) * 24) + 1, ((y + 1) * 24) + 1, 22, 22)
-                    }
-                }
-            }
-            break;
+    let notIBuffer = 1
+    if(currentHold == "I")
+    {
+        notIBuffer = 0
     }
+
+    for (let y = 0; y < tableMap[currentHold].length; y++) {
+        for (let x = 0; x < tableMap[currentHold].length; x++) {
+            if (tableMap[currentHold][y][x] != 0) {
+                hCTX.fillStyle = colorTable[tableMap[currentHold][y][x]]
+                hCTX.fillRect(((x + notIBuffer) * 24) + 1, ((y + 1) * 24) + 1, 22, 22)
+            }
+        }
+    }
+   
 }
 
 function drawQueue(queue) {
@@ -158,7 +166,6 @@ function drawQueue(queue) {
     }
     let queueMatrix = []
     for (let i = 0; i < queue.length; i++) {
-        qCTX.fillStyle = "#fff"
         let iterpiece = tableMap[queue[i]].map(function (arr) {
             return arr.slice();
         });

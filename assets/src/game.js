@@ -2,6 +2,7 @@ const bag = ["T", "J", "O", "Z", "S", "L", "I"]
 let currentBag = shuffle()
 let nextBag = shuffle()
 let currentPiece = new piece()
+let hardDropPos = 0
 let currentHold = null
 safeboard = matrix.map(function (arr) {
     return arr.slice();
@@ -27,6 +28,7 @@ function spawnPiece(piece) {
         return arr.slice();
     });
     drawBoard()
+    findGhostPiece()
 }
 
 
@@ -63,6 +65,7 @@ function pieceMove(dx, dy) {
                     return arr.slice();
                 });
                 drawBoard()
+                findGhostPiece()
                 return;
             }
             if (matrix[i][j] != 0) {
@@ -84,6 +87,7 @@ function pieceMove(dx, dy) {
         });
     }
     drawBoard()
+    findGhostPiece()
 }
 
 function clamp(num, lower, upper) {
@@ -98,14 +102,17 @@ function rotate(direction) {
     let safeboard = matrix.map(function (arr) {
         return arr.slice();
     });
+    let newRot
     let nextRot
     switch (direction) {
         case 0: //clockwise
             nextRot = currentPiece.pieceArr[0].map((val, index) => currentPiece.pieceArr.map(row => row[index]).reverse())
+            newRot = (currentPiece.rotation + 1) % 4;
             break;
 
         case 1: //counter clockwise
             nextRot = currentPiece.pieceArr[0].map((val, index) => currentPiece.pieceArr.map(row => row[row.length - 1 - index]))
+            newRot = (currentPiece.rotation + 3) % 4;
             break;
 
         case 2: //180
@@ -113,6 +120,7 @@ function rotate(direction) {
                 return arr.slice();
             });
             nextRot.reverse().forEach(function (item) { item.reverse(); });
+            newRot = (currentPiece.rotation + 2) % 4;
             break;
     }
 
@@ -187,29 +195,10 @@ function rotate(direction) {
             currentPiece.pieceArr = nextRot.map(function (arr) {
                 return arr.slice();
             });
-            function rotClamp() {
-                if (currentPiece.rotation == -1) {
-                    currentPiece.rotation = 3
-                }
-                if (currentPiece.rotation == 4) {
-                    currentPiece.rotation = 0
-                }
-            }
-            switch (direction) {
-                case 0:
-                    currentPiece.rotation = (currentPiece.rotation + 1) % 4;
-                    break;
-
-                case 1:
-                    currentPiece.rotation = (currentPiece.rotation + 3) % 4;
-                    break;
-
-                case 2:
-                    currentPiece.rotation = (currentPiece.rotation + 2) % 4;
-                    break;
-            }
-            rotClamp()
+            currentPiece.rotation = newRot
+            currentPiece.rotation = (currentPiece.rotation + 4) % 4
             drawBoard()
+            findGhostPiece()
             return;
         }
     }
@@ -217,6 +206,7 @@ function rotate(direction) {
         return arr.slice();
     });
     drawBoard()
+    findGhostPiece()
 }
 
 function holdPiece() {
@@ -253,8 +243,76 @@ function checkLines() {
         matrix.unshift(new Array(10).fill(0))
     }
     drawBoard()
+    findGhostPiece()
 }
 
+function findGhostPiece() {
+    let matCopy = matrix.map(function (arr) {
+        return arr.slice();
+    });
+    for (let i = currentPiece.y; i < currentPiece.y + currentPiece.pieceArr.length; i++) {
+        for (let j = currentPiece.x; j < currentPiece.x + currentPiece.pieceArr.length; j++) {
+            if (currentPiece.pieceArr[i - currentPiece.y][j - currentPiece.x] != 0) {
+                matCopy[i][j] = 0
+            }
+        }
+    }
+    let reached = false
+
+    let matSim = matCopy.map(function (arr) {
+        return arr.slice();
+    });
+
+    let dy = 1
+    let ybuffer = 0
+    while (!reached) {
+        matSim = matCopy.map(function (arr) {
+            return arr.slice();
+        });
+        for (let i = currentPiece.y; i < currentPiece.y + currentPiece.pieceArr.length; i++) {
+            for (let j = currentPiece.x; j < currentPiece.x + currentPiece.pieceArr.length; j++) {
+                if (currentPiece.pieceArr[i - currentPiece.y][j - currentPiece.x] != 0) {
+                    matSim[i][j] = 0
+                }
+            }
+        }
+
+        for (let i = currentPiece.y + dy; i < currentPiece.y + currentPiece.pieceArr.length + dy; i++) {
+            for (let j = currentPiece.x; j < currentPiece.x + currentPiece.pieceArr.length; j++) {
+                if (i > 19) {
+                    if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x] == 0)
+                    {
+                        continue
+                    }
+                    reached = true
+                    ybuffer = 1
+                    continue
+                }
+                if (matSim[i][j] != 0) {
+                    if (currentPiece.pieceArr[i - currentPiece.y - dy][j - currentPiece.x] == 0) {
+                        continue
+                    }
+                    reached = true
+                }
+            }
+        }
+        dy++
+        matCopy = matSim.map(function (arr) {
+            return arr.slice();
+        });
+        if (dy > 19) {
+            reached = true
+        }
+    }
+    dy-=2
+    hardDropPos = dy
+    drawGhost(dy)
+}
+
+function hardDrop()
+{
+    pieceMove(0,hardDropPos)
+}
 /*
 window.setInterval(function () {
     pieceMove(0, 1)
