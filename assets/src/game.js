@@ -254,6 +254,30 @@ function holdPiece() {
 function checkLines() {
     let removeRows = []
     let zeroCount
+    let coveredCorners = 0
+    let isTSpin = false
+    let isPC = false
+    if(currentPiece.pieceID == "T")
+    {
+        for(i=0;i<4;i++)
+        {
+            let x = tCorners[i][0]
+            let y = tCorners[i][1]
+            if(currentPiece.y+y>19)
+            {
+                if(currentPiece.pieceArr[y][x] == 0)
+                {
+                    continue
+                }
+                break
+            }
+            if(matrix[currentPiece.y+y][currentPiece.x+x] != 0)
+            {
+                coveredCorners++
+            }
+        }
+        isTSpin = coveredCorners >= 3
+    }
     for (let y = 0; y < 20; y++) {
         zeroCount = 0
         for (let x = 0; x < 10; x++) {
@@ -269,7 +293,8 @@ function checkLines() {
         matrix.splice(removeRows[i], 1)
         matrix.unshift(new Array(10).fill(0))
     }
-    clearEffect(removeRows.length)
+    isPC = JSON.stringify(matrix) === JSON.stringify(new Array(cols).fill(0).map(() => new Array(rows).fill(0)))
+    clearEffect(removeRows.length,isTSpin,isPC)
     drawBoard()
     findGhostPiece()
 }
