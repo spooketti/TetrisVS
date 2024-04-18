@@ -2,11 +2,12 @@ html,body
 {
     height:100%;
     margin:0;
-    background-color: black;
+    /*background-color: black;*/
 }
 
 #boardContainer
 {
+    position:relative;
     width:100%;
     height:100%;
     display: flex;
@@ -17,4 +18,35 @@ html,body
 .board
 {
     border:5px solid rgb(255, 255, 255);
+    background-color: black;
+}
+
+.pointMessage
+{
+    color:white;
+}
+
+.bgGradient {
+    background: linear-gradient(175deg, #000000, #000000, #9f9f9f);
+    background-size: 600% 600%;
+
+    -webkit-animation: bwGradient 59s ease infinite;
+    -moz-animation: bwGradient 59s ease infinite;
+    animation: bwGradient 59s ease infinite;
+}
+
+@-webkit-keyframes bwGradient {
+    0%{background-position:49% 0%}
+    50%{background-position:52% 100%}
+    100%{background-position:49% 0%}
+}
+@-moz-keyframes bwGradient {
+    0%{background-position:49% 0%}
+    50%{background-position:52% 100%}
+    100%{background-position:49% 0%}
+}
+@keyframes bwGradient {
+    0%{background-position:49% 0%}
+    50%{background-position:52% 100%}
+    100%{background-position:49% 0%}
 }

@@ -134,7 +134,7 @@ function drawGhost(dy) {
 }
 }
 
-function drawHold() {
+function drawHold(isHoldLocked) {
     for (let y = 0; y < 4; y++) {
         for (let x = 0; x < 4; x++) {
             hCTX.clearRect((x * 24) + 1, (y * 24) + 1, 22, 22)
@@ -151,6 +151,10 @@ function drawHold() {
         for (let x = 0; x < tableMap[currentHold].length; x++) {
             if (tableMap[currentHold][y][x] != 0) {
                 hCTX.fillStyle = colorTable[tableMap[currentHold][y][x]]
+                if(isHoldLocked)
+                {
+                    hCTX.fillStyle = "#ffffff"
+                }
                 hCTX.fillRect(((x + notIBuffer) * 24) + 1, ((y + 1) * 24) + 1, 22, 22)
             }
         }

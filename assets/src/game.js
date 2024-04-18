@@ -4,6 +4,7 @@ let nextBag = shuffle()
 let currentPiece = new piece()
 let hardDropPos = 0
 let currentHold = null
+let isHoldLocked = false
 safeboard = matrix.map(function (arr) {
     return arr.slice();
 });
@@ -33,12 +34,18 @@ function spawnPiece(piece) {
 
 
 
-function nextPiece() {
+function nextPiece(firstHoldCondition) {
+    isHoldLocked = false
+    if(firstHoldCondition)
+    {
+        isHoldLocked = true
+    }
     currentBag.shift()
     if (currentBag.length <= 0) {
         currentBag = [...nextBag]
         nextBag = shuffle()
     }
+    drawHold(isHoldLocked)
     spawnPiece(currentBag[0])
 }
 
@@ -210,18 +217,38 @@ function rotate(direction) {
 }
 
 function holdPiece() {
-    if (!currentHold) {
-        currentHold = currentBag[0]
-        nextPiece()
-        drawHold()
+    if (isHoldLocked) {
         return;
     }
+    if (!currentHold) {
+        isHoldLocked = true
+        for (let y = currentPiece.y; y < currentPiece.y + currentPiece.pieceArr.length; y++) {
+            for (let x = currentPiece.x; x < currentPiece.x + currentPiece.pieceArr.length; x++) {
+                if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x] !=0) {
+                    matrix[y][x] = 0
+                }
+            }
+        }
+        currentHold = currentBag[0]
+        nextPiece(true)
+        drawHold(isHoldLocked)
+        return;
+    }
+    for (let y = currentPiece.y; y < currentPiece.y + currentPiece.pieceArr.length; y++) {
+        for (let x = currentPiece.x; x < currentPiece.x + currentPiece.pieceArr.length; x++) {
+            if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x]!=0) {
+                
+                matrix[y][x] = 0
+            }
+        }
+    }
+    isHoldLocked = true
     let temp = currentBag[0]
     currentBag[0] = currentHold
     currentHold = temp
     currentHold = currentPiece.pieceID
     spawnPiece(currentBag[0])
-    drawHold()
+    drawHold(isHoldLocked)
 }
 
 function checkLines() {
@@ -242,6 +269,7 @@ function checkLines() {
         matrix.splice(removeRows[i], 1)
         matrix.unshift(new Array(10).fill(0))
     }
+    clearEffect(removeRows.length)
     drawBoard()
     findGhostPiece()
 }
@@ -280,8 +308,7 @@ function findGhostPiece() {
         for (let i = currentPiece.y + dy; i < currentPiece.y + currentPiece.pieceArr.length + dy; i++) {
             for (let j = currentPiece.x; j < currentPiece.x + currentPiece.pieceArr.length; j++) {
                 if (i > 19) {
-                    if(currentPiece.pieceArr[i-currentPiece.y-dy][j-currentPiece.x] == 0)
-                    {
+                    if (currentPiece.pieceArr[i - currentPiece.y - dy][j - currentPiece.x] == 0) {
                         continue
                     }
                     reached = true
@@ -304,14 +331,13 @@ function findGhostPiece() {
             reached = true
         }
     }
-    dy-=2
+    dy -= 2
     hardDropPos = dy
     drawGhost(dy)
 }
 
-function hardDrop()
-{
-    pieceMove(0,hardDropPos)
+function hardDrop() {
+    pieceMove(0, hardDropPos)
 }
 
 window.setInterval(function () {
