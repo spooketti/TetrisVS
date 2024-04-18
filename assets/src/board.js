@@ -135,6 +135,10 @@ function drawGhost(dy) {
 }
 
 function drawHold(isHoldLocked) {
+    if(!currentHold)
+    {
+        return
+    }
     for (let y = 0; y < 4; y++) {
         for (let x = 0; x < 4; x++) {
             hCTX.clearRect((x * 24) + 1, (y * 24) + 1, 22, 22)
