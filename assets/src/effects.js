@@ -9,6 +9,7 @@ let pcSound = new Audio("assets/audio/pc.mp3")
 let btbQuad = new Audio("assets/audio/btbquad.mp3")
 let btbTSD = new Audio("assets/audio/btbtsd.mp3")
 let btbTST = new Audio("assets/audio/btbtst.mp3")
+let currentCombo = -1
 
 let tSpinH = document.getElementById("TSpinH")
 let pcBody = document.getElementById("PC")
@@ -17,7 +18,13 @@ let scoreboard = document.getElementById("score")
 let score = 0
 let isBTB = false
 function clearEffect(lineCount, isTspin, isPC) {
+    currentCombo++
+    if(lineCount <= 0)
+    {
+        currentCombo = 0
+    }
     if (isPC) {
+        score += currentCombo * 50
         let pcSpan = document.createElement("span")
         pcSpan.classList.add("PCSpan")
         pcSpan.style.transform = "scale(0)"
@@ -27,7 +34,7 @@ function clearEffect(lineCount, isTspin, isPC) {
         window.setTimeout(function () { pcSpan.style.transform = "scale(0)"; window.setTimeout(function () { pcSpan.remove() }, 500) }, 5000)
         pcSound.play()
         score += 2000
-        scoreboard.innerText = "Score:" + score
+        scoreboard.innerText = score
         clearWord.style.opacity = "0"
         tSpinH.style.opacity = "0"
         return
@@ -35,6 +42,7 @@ function clearEffect(lineCount, isTspin, isPC) {
     clearWord.style.opacity = "0"
     tSpinH.style.opacity = "0"
     //console.log(lineCount)
+    score += currentCombo * 50
     switch (lineCount) {
         case 1:
             clearWord.style.opacity = "1"
@@ -44,19 +52,21 @@ function clearEffect(lineCount, isTspin, isPC) {
                     tSpinH.innerText = "BTB\nT-Spin"
                     tSpinH.style.opacity = "1"
                     tssSound.play()
+                    score+=(800*1.5)
                     break;
                 }
                 isBTB = true
                 tSpinH.innerText = "T-Spin"
                 tSpinH.style.opacity = "1"
                 tssSound.play()
+                score+=800
                 break;
             }
             isBTB = false
             singleSound.currentTime = 0
             singleSound.play()
             score += 100
-            scoreboard.innerText = "Score:" + score
+            // scoreboard.innerText = score
             break;
 
         case 2:
@@ -67,17 +77,19 @@ function clearEffect(lineCount, isTspin, isPC) {
                     tSpinH.innerText = "BTB\nT-Spin"
                     tSpinH.style.opacity = "1"
                     btbTSD.play()
+                    score+=(1200*1.5)
                     break;
                 }
                 isBTB = true
                 tSpinH.innerText = "T-Spin"
                 tSpinH.style.opacity = "1"
                 tsdSound.play()
+                score+=1200
                 break;
             }
             isBTB = false
-            score += 200
-            scoreboard.innerText = "Score:" + score
+            score += 300
+            // scoreboard.innerText = score
             doubleSound.play()
             break;
 
@@ -89,17 +101,19 @@ function clearEffect(lineCount, isTspin, isPC) {
                     tSpinH.innerText = "BTB\nT-Spin"
                     tSpinH.style.opacity = "1"
                     btbTST.play()
+                    score+=(1600*1.5)
                     break;
                 }
                 isBTB = true
                 tSpinH.innerText = "T-Spin"
                 tSpinH.style.opacity = "1"
                 tstSound.play()
+                score+=1600
                 break;
             }
             isBTB = false
-            score += 300
-            scoreboard.innerText = "Score:" + score
+            score += 500
+            // scoreboard.innerText = score
             tripleSound.play()
             break;
 
@@ -111,14 +125,20 @@ function clearEffect(lineCount, isTspin, isPC) {
                 tSpinH.innerText = "BTB"
                 tSpinH.style.opacity = "1"
                 btbQuad.play()
+                score+=(800*1.5)
                 break;
             }
             isBTB = true
             quadSound.play()
-            score += 500
-            scoreboard.innerText = "Score:" + score
+            score += 800
+            // scoreboard.innerText = score
             break;
 
 
     }
+    if(lineCount <= 0)
+    {
+        currentCombo = -1
+    }
+    scoreboard.innerText = score
 }
