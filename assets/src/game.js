@@ -36,8 +36,7 @@ function spawnPiece(piece) {
 
 function nextPiece(firstHoldCondition) {
     isHoldLocked = false
-    if(firstHoldCondition)
-    {
+    if (firstHoldCondition) {
         isHoldLocked = true
     }
     currentBag.shift()
@@ -167,6 +166,10 @@ function rotate(direction) {
 
         let dx = (defaultKick[offset][startRot][0] - defaultKick[offset][endRot][0])//*inv
         let dy = (defaultKick[offset][startRot][1] - defaultKick[offset][endRot][1])//*inv
+        if (currentPiece.pieceID == "I") {
+             dx = (IKick[offset][startRot][0] - IKick[offset][endRot][0])//*inv
+             dy = (IKick[offset][startRot][1] - IKick[offset][endRot][1])//*inv
+        }
 
         for (let i = currentPiece.y + dy; i < currentPiece.y + dy + currentPiece.pieceArr.length; i++) {
             for (let j = currentPiece.x + dx; j < currentPiece.x + dx + currentPiece.pieceArr.length; j++) {
@@ -224,7 +227,7 @@ function holdPiece() {
         isHoldLocked = true
         for (let y = currentPiece.y; y < currentPiece.y + currentPiece.pieceArr.length; y++) {
             for (let x = currentPiece.x; x < currentPiece.x + currentPiece.pieceArr.length; x++) {
-                if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x] !=0) {
+                if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x] != 0) {
                     matrix[y][x] = 0
                 }
             }
@@ -236,8 +239,8 @@ function holdPiece() {
     }
     for (let y = currentPiece.y; y < currentPiece.y + currentPiece.pieceArr.length; y++) {
         for (let x = currentPiece.x; x < currentPiece.x + currentPiece.pieceArr.length; x++) {
-            if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x]!=0) {
-                
+            if (currentPiece.pieceArr[y - currentPiece.y][x - currentPiece.x] != 0) {
+
                 matrix[y][x] = 0
             }
         }
@@ -256,24 +259,23 @@ function checkLines() {
     let zeroCount
     let coveredCorners = 0
     let isTSpin = false
+    let tripleCheck = false
     let isPC = false
-    if(currentPiece.pieceID == "T")
-    {
-        for(i=0;i<4;i++)
-        {
+    if (currentPiece.pieceID == "T") {
+        for (i = 0; i < 4; i++) {
             let x = tCorners[i][0]
             let y = tCorners[i][1]
-            if(currentPiece.y+y>19)
-            {
-                if(currentPiece.pieceArr[y][x] == 0)
-                {
+            if (currentPiece.y + y > 19) {
+                if (currentPiece.pieceArr[y][x] == 0) {
                     continue
                 }
                 break
             }
-            if(matrix[currentPiece.y+y][currentPiece.x+x] != 0)
-            {
+            if (matrix[currentPiece.y + y][currentPiece.x + x] != 0) {
                 coveredCorners++
+                if (matrix[currentPiece.y + y][currentPiece.x + x] == null) {
+                    tripleCheck = true
+                }
             }
         }
         isTSpin = coveredCorners >= 3
@@ -293,8 +295,11 @@ function checkLines() {
         matrix.splice(removeRows[i], 1)
         matrix.unshift(new Array(10).fill(0))
     }
+    if (currentPiece.rotation != 2 && coveredCorners != 4) {
+        isTSpin = false
+    }
     isPC = JSON.stringify(matrix) === JSON.stringify(new Array(cols).fill(0).map(() => new Array(rows).fill(0)))
-    clearEffect(removeRows.length,isTSpin,isPC)
+    clearEffect(removeRows.length, isTSpin, isPC)
     drawBoard()
     findGhostPiece()
 }
