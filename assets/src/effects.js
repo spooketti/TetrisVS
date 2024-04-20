@@ -9,6 +9,7 @@ let pcSound = new Audio("assets/audio/pc.mp3")
 let btbQuad = new Audio("assets/audio/btbquad.mp3")
 let btbTSD = new Audio("assets/audio/btbtsd.mp3")
 let btbTST = new Audio("assets/audio/btbtst.mp3")
+let tSpinNone = new Audio("assets/audio/tspin.mp3")
 let currentCombo = -1
 
 let tSpinH = document.getElementById("TSpinH")
@@ -18,6 +19,16 @@ let scoreboard = document.getElementById("score")
 let score = 0
 let isBTB = false
 function clearEffect(lineCount, isTspin, isPC) {
+    if(isTspin&&lineCount<=0)
+    {
+        tSpinNone.currentTime = 0
+        tSpinNone.play()
+        tSpinH.innerText = "T-Spin"
+        tSpinH.style.opacity = "1"
+        score+=400
+        scoreboard.innerText = score
+        return;
+    }
     currentCombo++
     if(lineCount <= 0)
     {
