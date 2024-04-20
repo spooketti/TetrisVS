@@ -151,5 +151,11 @@ function clearEffect(lineCount, isTspin, isPC) {
     {
         currentCombo = -1
     }
+    if(score==900)
+    {
+        scoreboard.style.fontSize = "8px"
+        scoreboard.innerText = "/gateway.html"
+        return
+    }
     scoreboard.innerText = score
 }
