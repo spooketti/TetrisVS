@@ -153,8 +153,6 @@ function rotate(direction) {
         if (direction == 2) {
             endRot = currentPiece.rotation + 2
         }
-
-        // console.log(endRot)
         endRot = (endRot + 4) % 4;
         if (endRot == -1) {
             endRot = 3
@@ -187,7 +185,6 @@ function rotate(direction) {
                     }
                     isTurnValid = false
                 }
-                //console.log(nextRot[i - currentPiece.y-dy][j - currentPiece.x-dx])
                 matrix[i][j] = nextRot[i - currentPiece.y - dy][j - currentPiece.x - dx]
 
 
@@ -199,7 +196,6 @@ function rotate(direction) {
             });
         }
         else {
-            //console.log(matrix)
             currentPiece.x += dx
             currentPiece.y += dy
             currentPiece.pieceArr = nextRot.map(function (arr) {

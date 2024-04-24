@@ -52,7 +52,6 @@ function clearEffect(lineCount, isTspin, isPC) {
     }
     clearWord.style.opacity = "0"
     tSpinH.style.opacity = "0"
-    //console.log(lineCount)
     score += currentCombo * 50
     switch (lineCount) {
         case 1:
@@ -77,7 +76,6 @@ function clearEffect(lineCount, isTspin, isPC) {
             singleSound.currentTime = 0
             singleSound.play()
             score += 100
-            // scoreboard.innerText = score
             break;
 
         case 2:
@@ -100,7 +98,6 @@ function clearEffect(lineCount, isTspin, isPC) {
             }
             isBTB = false
             score += 300
-            // scoreboard.innerText = score
             doubleSound.play()
             break;
 
@@ -124,7 +121,6 @@ function clearEffect(lineCount, isTspin, isPC) {
             }
             isBTB = false
             score += 500
-            // scoreboard.innerText = score
             tripleSound.play()
             break;
 
@@ -142,10 +138,7 @@ function clearEffect(lineCount, isTspin, isPC) {
             isBTB = true
             quadSound.play()
             score += 800
-            // scoreboard.innerText = score
             break;
-
-
     }
     if(lineCount <= 0)
     {

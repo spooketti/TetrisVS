@@ -1,58 +1,8 @@
 let board = document.getElementById("board")
 let bCTX = board.getContext("2d")
-//consider making the rows bigger or smaller for custom gamemodes like 4 wide
 let rows = 10
 let cols = 20
 let matrix = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-/*
-matrix  = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [6, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [6, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [6, 0, 3, 3, 0, 0, 1, 1, 0, 0],
-    [6, 3, 3, 0, 0, 0, 1, 2, 7, 7],
-    [6, 7, 7, 0, 5, 5, 1, 2, 7, 7],
-    [6, 7, 7, 0, 0, 5, 5, 2, 2, 5],
-    [5, 4, 4, 0, 3, 3, 2, 2, 2, 6],
-    [7, 7, 3, 3, 0, 3, 2, 1, 2, 6]
-]*/
-/*
-matrix =
-[
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 2, 2, 2, 0, 0, 0, 2, 2, 2],
-[7, 7, 0, 0, 0, 0, 0, 2, 3, 3],
-[7, 7, 0, 0, 0, 0, 0, 3, 3, 5],
-[6, 0, 7, 7, 0, 0, 0, 0, 5, 5],
-[6, 0, 7, 7, 0, 0, 0, 4, 5, 1],
-[6, 0, 1, 6, 0, 0, 4, 4, 4, 1],
-[6, 1, 1, 6, 0, 0, 5, 5, 1, 1],
-[2, 2, 2, 6, 0, 0, 0, 5, 5, 6],
-[2, 7, 7, 6, 3, 3, 0, 7, 7, 6],
-[3, 7, 7, 3, 3, 0, 0, 7, 7, 6],
-[6, 1, 1, 1, 5, 5, 0, 4, 4, 3],
-[6, 1, 2, 1, 5, 0, 5, 5, 7, 7]
-]
-*/
-
 let hold = document.getElementById("hold")
 let hCTX = hold.getContext("2d")
 let queue = document.getElementById("queue")
@@ -115,7 +65,6 @@ function drawBoard() {
 function drawGhost(dy) {
     for (let y = currentPiece.y + dy; y < currentPiece.y + dy+currentPiece.pieceArr.length; y++) {
         for (let x = currentPiece.x; x < currentPiece.pieceArr.length+currentPiece.x; x++) {
-            //bCTX.clearRect((x * 24) + 1, (y * 24) + 1, 22, 22)
             if(y>19)
             {
                 continue
@@ -124,14 +73,11 @@ function drawGhost(dy) {
                 if(currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x]!=0)
                 {
                     bCTX.fillStyle = colorTable[currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x]]+"70"
-                    // console.log(currentPiece.pieceArr[y - currentPiece.y-dy][x-currentPiece.x])
                     bCTX.fillRect((x * 24) + 1, (y * 24) + 1, 22, 22)
                 }
             }
         }
-    
-    //drawBoard()
-}
+    }
 }
 
 function drawHold(isHoldLocked) {
