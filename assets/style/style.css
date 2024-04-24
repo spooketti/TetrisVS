@@ -98,3 +98,17 @@ html,body
         background-position: 200%;
     }
 }
+
+#navbar
+{
+    z-index: 4;
+    height:64px;
+    position: fixed;
+    left:0;
+    top:0;
+    width:100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -1,5 +1,6 @@
 document.addEventListener("keydown",function(e)
 {
+    e.preventDefault()
     switch(e.code)
     {
         

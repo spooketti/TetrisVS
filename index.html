@@ -8,7 +8,14 @@
     <link rel="stylesheet" href="assets/style/style.css">
   </head>
   <body class="bgGradient">
+    
+    <nav id="navbar"><a href="login.html" id="LoginAnchor">Login</a><span id="UsernameID"></span><span id="flagMessage">Login and reach 900000000000 Score to Win the Flag!</span><button onclick="submitScore()">Submit Score!</button></nav>
+    <p style="color:white; margin-top:64px;">Username Leaderboard!</p>
+    <ul>
+      <li style="color:white">jonnyboi: 1000</li>
+    </ul>
     <div id="boardContainer">
+      
     <div style="max-width:106px">
       <h1 class="pointMessage" id="TSpinH">T Spin</h1>
       <h1 class="pointMessage" id="ClearWord">abc</h1>
@@ -22,11 +29,14 @@
   <div id="PC">
 
   </div>
+
   <script src="assets/src/effects.js"></script>
   <script src="assets/src/piece.js"></script>
   <script src="assets/src/rotatetable.js"></script>
 	<script src="assets/src/board.js"></script>
   <script src="assets/src/game.js"></script>
   <script src="assets/src/control.js"></script>
+  <script src="assets/src/auth.js"></script>
+  <script src="assets/src/scoreSubmit.js"></script>
   </body>
 </html>
