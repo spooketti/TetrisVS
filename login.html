@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login To Tetris</title>
+  <link rel="stylesheet" href="style/login.css">
+  <link rel="icon" href="assets/img/icon.png">
+</head>
+
+<body>
+  <nav id="navbar" data-theme="dark"><a href="index.html" id="navTitle"><img src="assets/img/icon.png"
+        id="navIcon"><span id="navName" data-theme="dark">Relay</span></a><button id="LoginButton"
+        onclick="window.location.href = 'login.html'">Login</button></nav>
+  <div id="LoginBackground"></div>
+  <div id="LoginSharpen"></div>
+  <div id="LoginForum">
+    <div id="LoginForumBlurBG"></div>
+    <div id="LoginGraphic">
+      <i id="LoginSplashMessage">Wake up</i>
+      <img src="assets/img/loginGraphic.png" id="LoginGraphicImage">
+    </div>
+    <div id="LoginInput">
+      <h1 style="font-family: 'Kode Mono', monospace;">Login To Relay</h1>
+      <form method="post" id="loginForm">
+        <input type="text" autocomplete="off" placeholder="User ID" name="username" required id="userIDLogin" class="LoginTextInput">
+        <input type="password" autocomplete="off" placeholder="Password" name="password" required id="passwordLogin"
+          class="LoginTextInput">
+        <input type="submit" value="Login" id="LoginSubmitButton">
+        <span class="LoginToggle">Don't Have an Account?</span>
+        <br>
+        <span class="LoginToggleButton" onclick="toggleUI()">Register</span>
+      </form>
+    </div>
+  </div>
+
+  <div id="SignupForum">
+    <div id="SignupForumBlurBG"></div>
+    <div id="SignupGraphic">
+      <i id="SignupSplashMessage">Wake up</i>
+      <img src="assets/img/signupGraphic.png" id="SignupGraphicImage">
+    </div>
+    <div id="SignupInput">
+      <h1 style="font-family: 'Kode Mono', monospace;">Register For Relay</h1>
+      <form method="post" id="signupForm">
+        <input type="text"  autocomplete="off" placeholder="Username" name="username" required id="usernameSignup" class="LoginTextInput">
+        <input type="text"  autocomplete="off" placeholder="User ID" name="userID" required id="userIDSignup" class="LoginTextInput">
+        <input type="password" placeholder="Password" name="password" required id="passwordSignup"
+          class="LoginTextInput">
+        <input type="password" placeholder="Confirm Password" name="passwordConfirm" required id="passwordConfirm"
+          class="LoginTextInput">
+        <span>Upload Profile Picture</span>
+        <br>
+        <img src="assets/img/DefaultPFP.png" id="signupPFPPreview">
+        <button id="uploadPFP" onclick="pfpFile.click()" type="button"><span class="material-symbols-outlined">
+            upload_file
+          </span></button>
+        <input type="file" id="uploadPFPFile" accept=".png,.jpeg,.jpg,.gif">
+        <input type="submit" value="Register" id="SignupSubmitButton">
+        <span class="LoginToggle">Already Have an Account?</span>
+        <br>
+        <span class="LoginToggleButton" onclick="toggleUI()">Login</span>
+      </form>
+    </div>
+  </div>
+
+  <div id="LoginFail"><span>Exception: </span><span id="LoginException">This is somehow visible?</span></div>
+  <script src="src/login.js"></script>
+</body>
+
+</html>

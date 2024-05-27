@@ -18,7 +18,12 @@ function spawnPiece(piece) {
     drawQueue(currentBag.concat(nextBag).slice(1, 6))
     for (let i = 0; i < tableMap[piece].length; i++) {
         for (let j = 0; j < tableMap[piece].length; j++) {
-            matrix[i][j + 3] = tableMap[piece][i][j]
+           if(matrix[i][j+3] != 0 && tableMap[piece][i][j] != 0)
+            {
+                alert("BLOCKED")
+            }
+                matrix[i][j + 3] = tableMap[piece][i][j]
+            // console.log(matrix[i][j+3])
         }
     }
     currentPiece.x = 3
