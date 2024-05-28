@@ -1,29 +1,26 @@
-function showLeaderboard() {
-    document.getElementById('popupOverlay').style.display = 'block';
-    document.getElementById('popup').style.display = 'block';
-    fetchLeaderboard();
-}
-
-function hideLeaderboard() {
-    document.getElementById('popupOverlay').style.display = 'none';
-    document.getElementById('popup').style.display = 'none';
-}
-
-function fetchLeaderboard() {
-    fetch('http://127.0.0.1:8086/getLeaderboard')
+document.addEventListener("DOMContentLoaded", function() {
+  fetch('http://127.0.0.1:8086/getLeaderboard/')
       .then(response => response.json())
       .then(data => {
-        const tbody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
-        tbody.innerHTML = '';
-        data.forEach(entry => {
-          const row = tbody.insertRow();
-          const cellUser = row.insertCell(0);
-          const cellDate = row.insertCell(1);
-          const cellScore = row.insertCell(2);
-          cellUser.textContent = entry.user;
-          cellDate.textContent = entry.datetime;
-          cellScore.textContent = entry.highscore;
-        });
+          const tableBody = document.querySelector("#leaderboard-table tbody");
+          data.forEach(entry => {
+              const row = document.createElement("tr");
+              const userCell = document.createElement("td");
+              userCell.textContent = entry.user;
+              row.appendChild(userCell);
+
+              const scoreCell = document.createElement("td");
+              scoreCell.textContent = entry["high score"];
+              row.appendChild(scoreCell);
+
+              const dateCell = document.createElement("td");
+              dateCell.textContent = entry.date;
+              row.appendChild(dateCell);
+
+              tableBody.appendChild(row);
+          });
       })
-      .catch(error => console.error('Error fetching leaderboard:', error));
-}
+      .catch(error => {
+          console.error('Error fetching the leaderboard data:', error);
+      });
+});
