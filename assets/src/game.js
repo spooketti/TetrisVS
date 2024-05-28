@@ -14,12 +14,33 @@ function shuffle() {
 };
 
 
+function sendScore() {
+    score = parseInt(document.getElementById("score"))
+    fetch('http://127.0.0.1:8086/saveScore/',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify({"score": score})
+        }).then(response =>{
+            if(response.ok)
+            {
+                return response.json()
+            }
+            throw new Error("Network response failed")
+        })
+}
+
+
 function spawnPiece(piece) {
     drawQueue(currentBag.concat(nextBag).slice(1, 6))
     for (let i = 0; i < tableMap[piece].length; i++) {
         for (let j = 0; j < tableMap[piece].length; j++) {
            if(matrix[i][j+3] != 0 && tableMap[piece][i][j] != 0)
             {
+                sendScore()
                 alert("BLOCKED")
             }
                 matrix[i][j + 3] = tableMap[piece][i][j]
