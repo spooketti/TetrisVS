@@ -18,9 +18,25 @@
   </div>
     <canvas id="board" class="board" width="240" height="480"></canvas>
     <canvas id="queue" class="board" height="240" width="96"></canvas>
+    <button onclick="showLeaderboard()">Show Leaderboard</button>
   </div>
   <div id="PC">
-
+  </div>
+  <div id="popupOverlay" class="popup-overlay" onclick="hideLeaderboard()"></div>
+  <div id="popup" class="popup">
+    <h2>Leaderboard</h2>
+    <table id="leaderboardTable" class="popup-table">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Date/Time</th>
+          <th>High Score</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <button onclick="hideLeaderboard()">Close</button>
   </div>
   <script src="assets/src/effects.js"></script>
   <script src="assets/src/piece.js"></script>
@@ -28,5 +44,6 @@
 	<script src="assets/src/board.js"></script>
   <script src="assets/src/game.js"></script>
   <script src="assets/src/control.js"></script>
+  <script src="assets/src/leaderboard.js"></script>
   </body>
 </html>
