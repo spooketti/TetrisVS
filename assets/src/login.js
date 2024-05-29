@@ -1,5 +1,18 @@
 const loginEndpoint = "http://127.0.0.1:8086/login/"
 const signupEndpoint = "http://127.0.0.1:8086/signup/"
+let loginSharpenElement = document.getElementById("LoginSharpen")
+const sharpRadius = 150;
+let loginOpen = true;
+let loginField = document.getElementById("LoginForum")
+let signupField = document.getElementById("SignupForum")
+let pfpFile = document.getElementById("uploadPFPFile")
+let pfpPreview = document.getElementById("signupPFPPreview")
+let SignupSplashMessage = document.getElementById("SignupSplashMessage") 
+let signupForm = document.getElementById("signupForm")
+let loginForm = document.getElementById("loginForm")
+let loginFail = document.getElementById("LoginFail")
+let signSplash = ["Signup to Relay","Join the discussion"]
+let loginSplash = ["Welcome back to Relay", "let today = new Day()","This is just a fancy way to fetch()"]
 
 function login()
 {
@@ -68,4 +81,29 @@ function signup()
           .catch(error => {
             console.error("There was a problem with the fetch", error);
           });
+}
+
+document.addEventListener("mousemove",function(e)
+{
+  loginSharpenElement.style.left = `${e.clientX-sharpRadius}px`
+  loginSharpenElement.style.top = `${e.clientY-sharpRadius}px`
+  loginSharpenElement.style.backgroundPositionX = `${e.clientX/10}px`
+  loginSharpenElement.style.backgroundPositionY = `${e.clientY/10}px`
+})
+
+function toggleUI()
+{
+ loginOpen = !loginOpen
+ if(loginOpen)
+ {
+  loginField.style.display = "flex"
+  signupField.style.display = "none"
+  loginField.style.animation = "fadeInUp 1s ease"
+  LoginSplashMessage.innerText = loginSplash[Math.floor(Math.random() * loginSplash.length)]
+  return
+ }
+ loginField.style.display = "none"
+ signupField.style.display = "flex"
+ signupField.style.animation = "fadeInUp 1s ease"
+ SignupSplashMessage.innerText = signSplash[Math.floor(Math.random() * signSplash.length)]
 }
