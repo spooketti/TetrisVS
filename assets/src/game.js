@@ -5,6 +5,15 @@ let currentPiece = new piece()
 let hardDropPos = 0
 let currentHold = null
 let isHoldLocked = false
+let lines = 0
+let totalLines = 0
+let gravity = 500
+
+let currentTouchTime = 0
+let isTouching = false
+let lockDelay
+
+let lineElement = document.getElementById("line")
 safeboard = matrix.map(function (arr) {
     return arr.slice();
 });
@@ -23,10 +32,9 @@ function sendScore() {
                 "Content-Type": "application/json"
             },
             credentials: 'include',
-            body: JSON.stringify({"score": score})
-        }).then(response =>{
-            if(response.ok)
-            {
+            body: JSON.stringify({ "score": score })
+        }).then(response => {
+            if (response.ok) {
                 return response.json()
             }
             throw new Error("Network response failed")
@@ -38,12 +46,12 @@ function spawnPiece(piece) {
     drawQueue(currentBag.concat(nextBag).slice(1, 6))
     for (let i = 0; i < tableMap[piece].length; i++) {
         for (let j = 0; j < tableMap[piece].length; j++) {
-           if(matrix[i][j+3] != 0 && tableMap[piece][i][j] != 0)
-            {
+            if (matrix[i][j + 3] != 0 && tableMap[piece][i][j] != 0) {
                 sendScore()
-                alert("BLOCKED")
+                alert("GAME OVER")
+                window.location.href =  "index.html"
             }
-                matrix[i][j + 3] = tableMap[piece][i][j]
+            matrix[i][j + 3] = tableMap[piece][i][j]
             // console.log(matrix[i][j+3])
         }
     }
@@ -70,6 +78,7 @@ function nextPiece(firstHoldCondition) {
         currentBag = [...nextBag]
         nextBag = shuffle()
     }
+    resetLockDelay()
     drawHold(isHoldLocked)
     spawnPiece(currentBag[0])
 }
@@ -93,6 +102,19 @@ function pieceMove(dx, dy) {
                 if (currentPiece.pieceArr[i - currentPiece.y - dy][j - currentPiece.x - dx] == 0) {
                     continue
                 }
+                if (!isTouching) {
+                    isTouching = true
+                    lockDelay = window.setInterval(function () {
+                        currentTouchTime++
+                        if(currentTouchTime >= 40)
+                            {
+                                clearInterval(lockDelay)
+                                checkLines()
+                                nextPiece()
+                            }
+                        // console.log(currentTouchTime)
+                    }, 50)
+                }
                 matrix = safeboard.map(function (arr) {
                     return arr.slice();
                 });
@@ -104,8 +126,34 @@ function pieceMove(dx, dy) {
                 if (currentPiece.pieceArr[i - currentPiece.y - dy][j - currentPiece.x - dx] == 0) {
                     continue
                 }
+                if(findGhostPiece() == 0)
+                    {
+                        if (!isTouching) {
+                            isTouching = true
+                            lockDelay = window.setInterval(function () {
+                                currentTouchTime++
+                                if(currentTouchTime > 40)
+                                    {
+                                        clearInterval(lockDelay)
+                                        checkLines()
+                                        nextPiece()
+                                    }
+                                // console.log(currentTouchTime)
+                            }, 50)
+                        }
+                    }
+                    else
+                    {
+                        isTouching = false
+                        clearInterval(lockDelay)
+                    }
                 isMoveValid = false
             }
+            if(findGhostPiece() != 0)
+                {
+                    isTouching = false
+                    clearInterval(lockDelay)
+                }
             matrix[i][j] = currentPiece.pieceArr[i - currentPiece.y - dy][j - currentPiece.x - dx]
         }
     }
@@ -191,8 +239,8 @@ function rotate(direction) {
         let dx = (defaultKick[offset][startRot][0] - defaultKick[offset][endRot][0])//*inv
         let dy = (defaultKick[offset][startRot][1] - defaultKick[offset][endRot][1])//*inv
         if (currentPiece.pieceID == "I") {
-             dx = (IKick[offset][startRot][0] - IKick[offset][endRot][0])//*inv
-             dy = (IKick[offset][startRot][1] - IKick[offset][endRot][1])//*inv
+            dx = (IKick[offset][startRot][0] - IKick[offset][endRot][0])//*inv
+            dy = (IKick[offset][startRot][1] - IKick[offset][endRot][1])//*inv
         }
 
         for (let i = currentPiece.y + dy; i < currentPiece.y + dy + currentPiece.pieceArr.length; i++) {
@@ -254,6 +302,7 @@ function holdPiece() {
                 }
             }
         }
+        resetLockDelay()
         currentHold = currentBag[0]
         nextPiece(true)
         drawHold(isHoldLocked)
@@ -267,6 +316,7 @@ function holdPiece() {
             }
         }
     }
+    resetLockDelay()
     isHoldLocked = true
     let temp = currentBag[0]
     currentBag[0] = currentHold
@@ -321,6 +371,19 @@ function checkLines() {
         isTSpin = false
     }
     isPC = JSON.stringify(matrix) === JSON.stringify(new Array(cols).fill(0).map(() => new Array(rows).fill(0)))
+    lines += removeRows.length
+    totalLines += removeRows.length
+    lineElement.innerText = totalLines
+    if (lines >= 10) {
+        lines -= 10
+        if (gravity > 50) {
+            gravity -= 50
+            window.clearInterval(gravityInterval)
+            gravityInterval = window.setInterval(function () {
+                pieceMove(0, 1)
+            }, gravity)
+        }
+    }
     clearEffect(removeRows.length, isTSpin, isPC)
     drawBoard()
     findGhostPiece()
@@ -386,15 +449,24 @@ function findGhostPiece() {
     dy -= 2
     hardDropPos = dy
     drawGhost(dy)
+    return dy
 }
 
 function hardDrop() {
     pieceMove(0, hardDropPos)
+    resetLockDelay()
 }
 
-window.setInterval(function () {
+function resetLockDelay()
+{
+    currentTouchTime = 0
+    isTouching = false
+    clearInterval(lockDelay)
+}
+
+let gravityInterval = window.setInterval(function () {
     pieceMove(0, 1)
-}, 500)
+}, gravity)
 
 
 
