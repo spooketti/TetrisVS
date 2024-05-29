@@ -79,9 +79,10 @@ function login()
             credentials: "include",
             body: JSON.stringify(payload)
         }).then(response =>{
+          console.log(response)
             if(response.ok)
             {
-                return response.json()
+                return response.text()
             }
             throw new Error("Network response failed")
         }).then(data => {
