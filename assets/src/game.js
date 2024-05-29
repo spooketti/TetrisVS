@@ -28,7 +28,7 @@ function sendScore() {
     console.log(score)
     body = JSON.stringify({"score": score})
     console.log(body)
-    fetch('http://127.0.0.1:8080/saveScore/',
+    fetch('https://tetrisvs.stu.nighthawkcodingsociety.com/saveScore/',
         {
             method: 'POST',
             headers: {

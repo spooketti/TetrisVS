@@ -1,6 +1,6 @@
 let isLBOpen = false
 document.addEventListener("DOMContentLoaded", function () {
-    fetch('http://127.0.0.1:8080/getLeaderboard/', { method: "GET" })
+    fetch('https://tetrisvs.stu.nighthawkcodingsociety.com/getLeaderboard/', { method: "GET" })
         .then(response => response.json())
         .then(data => {
             console.log(data)
