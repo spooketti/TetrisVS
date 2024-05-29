@@ -1,5 +1,5 @@
-const loginEndpoint = "http://127.0.0.1:8086/login/"
-const signupEndpoint = "http://127.0.0.1:8086/signup/"
+const loginEndpoint = "https://tetrisvs.stu.nighthawkcodingsociety.com/login/"
+const signupEndpoint = "https://tetrisvs.stu.nighthawkcodingsociety.com/signup/"
 let loginSharpenElement = document.getElementById("LoginSharpen")
 const sharpRadius = 150;
 let loginOpen = true;
@@ -7,12 +7,59 @@ let loginField = document.getElementById("LoginForum")
 let signupField = document.getElementById("SignupForum")
 let pfpFile = document.getElementById("uploadPFPFile")
 let pfpPreview = document.getElementById("signupPFPPreview")
+let LoginSplashMessage = document.getElementById("LoginSplashMessage")
 let SignupSplashMessage = document.getElementById("SignupSplashMessage") 
 let signupForm = document.getElementById("signupForm")
 let loginForm = document.getElementById("loginForm")
 let loginFail = document.getElementById("LoginFail")
-let signSplash = ["Signup to Relay","Join the discussion"]
-let loginSplash = ["Welcome back to Relay", "let today = new Day()","This is just a fancy way to fetch()"]
+let signSplash = ["Signup to Tetris","Join the T-Spinning","Finally: A Tetris website with SRS rotation","Advik's Voice Actor Debut"]
+let loginSplash = ["Welcome back to Tetris", "Learn some openers", "Stickspin is kinda goated?", "Back to Back Login"]
+let pfpChanged = false
+let pfpDefault
+
+let xhr = new XMLHttpRequest();       
+    xhr.open("GET", "https://i.ibb.co/jWTYmQS/Default-PFP.png", true); 
+    xhr.responseType = "blob";
+    xhr.onload = function () {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+               let res = event.target.result;
+               pfpDefault = res
+            }
+            let file = this.response;
+            reader.readAsDataURL(file)
+    };
+    xhr.send()
+
+pfpFile.addEventListener('change', function(event) {
+  pfpChanged = true
+  const file = event.target.files[0];
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+          const imageUrl = event.target.result;
+          const image = new Image();
+          image.src = imageUrl;
+          image.onload = function() {
+              pfpChanged = true
+              pfpPreview.src = image.src
+          };
+      };
+      reader.readAsDataURL(file);
+  }
+});
+
+signupForm.addEventListener("submit",function(e)
+{
+  e.preventDefault()
+  signup()
+})
+
+loginForm.addEventListener("submit",function(e)
+{
+  e.preventDefault()
+  login()
+})
 
 function login()
 {
@@ -52,7 +99,7 @@ function signup()
     "userID":document.getElementById("userIDSignup").value,
     "username":document.getElementById("usernameSignup").value,
     "password":document.getElementById("passwordSignup").value,
-    "pfp": pfpChanged ? pfpPreview.src : defaultPFP,
+    "pfp": pfpChanged ? pfpPreview.src : pfpDefault,
   }
     fetch(signupEndpoint,
         {
@@ -69,14 +116,8 @@ function signup()
             }
             throw new Error("Network response failed")
         }).then(data => {
-            //let jwt = JSON.parse(data)
-            if(data["error"])
-            {
-              showException(data["error"])
-              return
-            }
             localStorage.setItem("jwt",data["jwt"])
-            window.location.href = "app.html"
+            window.location.href = "index.html"
           })
           .catch(error => {
             console.error("There was a problem with the fetch", error);
@@ -107,3 +148,4 @@ function toggleUI()
  signupField.style.animation = "fadeInUp 1s ease"
  SignupSplashMessage.innerText = signSplash[Math.floor(Math.random() * signSplash.length)]
 }
+LoginSplashMessage.innerText = loginSplash[Math.floor(Math.random() * loginSplash.length)]
