@@ -86,7 +86,8 @@ function login()
             }
             throw new Error("Network response failed")
         }).then(data => {
-            localStorage.setItem("jwt",data["jwt"])
+            // localStorage.setItem("jwt",data["jwt"])
+            window.location.href = "index.html"
           })
           .catch(error => {
             console.error("There was a problem with the fetch", error);
