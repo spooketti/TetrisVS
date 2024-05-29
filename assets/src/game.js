@@ -24,15 +24,18 @@ function shuffle() {
 
 
 function sendScore() {
-    score = parseInt(document.getElementById("score"))
-    fetch('http://127.0.0.1:8086/saveScore/',
+    score = parseInt(document.getElementById("score").textContent)
+    console.log(score)
+    body = JSON.stringify({"score": score})
+    console.log(body)
+    fetch('http://127.0.0.1:8080/saveScore/',
         {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             credentials: 'include',
-            body: JSON.stringify({ "score": score })
+            body: body
         }).then(response => {
             if (response.ok) {
                 return response.json()

@@ -1,5 +1,5 @@
-const loginEndpoint = "https://tetrisvs.stu.nighthawkcodingsociety.com/login/"
-const signupEndpoint = "https://tetrisvs.stu.nighthawkcodingsociety.com/signup/"
+const loginEndpoint = "http://127.0.0.1:8080/login/"
+const signupEndpoint = "http://127.0.0.1:8080/signup/"
 let loginSharpenElement = document.getElementById("LoginSharpen")
 const sharpRadius = 150;
 let loginOpen = true;
