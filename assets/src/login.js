@@ -82,7 +82,7 @@ function login()
           console.log(response)
             if(response.ok)
             {
-                return response.json()
+                return response.text()
             }
             throw new Error("Network response failed")
         }).then(data => {
