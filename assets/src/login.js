@@ -82,11 +82,11 @@ function login()
           console.log(response)
             if(response.ok)
             {
-                return response.text()
+                return response.json()
             }
             throw new Error("Network response failed")
         }).then(data => {
-            // localStorage.setItem("jwt",data["jwt"])
+            localStorage.setItem("jwt",data["jwt"])
             window.location.href = "index.html"
           })
           .catch(error => {
